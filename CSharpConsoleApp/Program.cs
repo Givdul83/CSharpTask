@@ -3,6 +3,6 @@ using CSharpConsoleApp.Services;
 using System.Linq.Expressions;
 
 var contactService = new ContactService();
-var menuService = new MenuService();
+var menuService = new MenuService(contactService);
 
 menuService.MainMenu();

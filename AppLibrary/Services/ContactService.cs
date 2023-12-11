@@ -9,14 +9,21 @@ namespace AppLibrary.Services;
 public class ContactService : IContactService
 
 {
-    private readonly IFileService _fileService = new FileService();
+    private readonly IFileService _fileService;
+
+
+
     private List<IContact> _contacts = [];
     private readonly string _filePath = @"c:\csharptask\contacts.json";
+
+   
 
     public bool AddContactToList(IContact contact)
     {
         try
         {
+            GetContactsFromList();
+
             if (!_contacts.Any(x => x.Email == contact.Email))
             {
                 _contacts.Add(contact);
@@ -77,7 +84,10 @@ public class ContactService : IContactService
                 _contacts.Remove(contact);
                 return true;
             }
-            else { return false; };
+            else 
+            {
+                return false;
+            }
         }
         catch (Exception ex) { Debug.WriteLine("ContactService- RemoveContactToList" + ex.Message); }
         return false;

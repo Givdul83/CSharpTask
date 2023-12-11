@@ -8,8 +8,12 @@ namespace CSharpConsoleApp.Services;
 
 internal class MenuService 
 {
-    private readonly ContactService contactService= new ContactService();  
+    private readonly ContactService _contactService;
 
+    public MenuService(ContactService contactService)
+    {
+        _contactService = contactService;
+    }
 
     public void MainMenu()
     {
@@ -39,7 +43,7 @@ internal class MenuService
                 {
                     case "1":
                         Console.Clear();
-                        var list = contactService.GetContactsFromList();
+                        var list = _contactService.GetContactsFromList();
                         Console.Clear();
                         Console.WriteLine("###  All Contacts  ###");
                         Console.WriteLine();
@@ -69,7 +73,7 @@ internal class MenuService
                         Console.Write("Please enter email of person you are searching for: ");
                         string searchedEmail = Console.ReadLine()?.ToLower() ?? "";
                         Console.WriteLine();
-                        IContact foundPerson = contactService.GetContactFromList(searchedEmail);
+                        IContact foundPerson = _contactService.GetContactFromList(searchedEmail);
 
                         if (foundPerson != null)
                         {
@@ -104,7 +108,7 @@ internal class MenuService
                         Console.Write("Please enter email of person you want to remove: ");
                         string deleteEmail = Console.ReadLine()?.ToLower() ?? "";
                         Console.WriteLine();
-                        IContact deletePerson = contactService.GetContactFromList(deleteEmail);
+                        IContact deletePerson = _contactService.GetContactFromList(deleteEmail);
 
                         if (deletePerson != null)
                         {
@@ -115,7 +119,7 @@ internal class MenuService
                             switch (delete)
                             {
                                 case "y":
-                                    contactService.RemoveContactFromList(deleteEmail);
+                                    _contactService.RemoveContactFromList(deleteEmail);
                                     Console.WriteLine($"{deletePerson.FirstName} {deletePerson.LastName} has been removed");
                                     Console.ReadKey();
                                     break;
@@ -135,7 +139,8 @@ internal class MenuService
                         }
                         else
                         {
-                            Console.WriteLine($"Couldn´t find a person with Email : {deletePerson!.Email} in list ");
+                            Console.WriteLine($"Couldn´t find a person with Email : {deleteEmail} in list ");
+                            Console.WriteLine("Press any key to return to main menu");
                             Console.ReadKey();
                             break;
                         }
@@ -164,7 +169,7 @@ internal class MenuService
                     Console.Write("Phonenumber:");
                     newContact.PhoneNumber = Console.ReadLine()??"";
 
-                    contactService.AddContactToList(newContact);
+                    _contactService.AddContactToList(newContact);
 
                     break;
 
