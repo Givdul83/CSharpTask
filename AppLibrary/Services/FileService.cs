@@ -1,11 +1,13 @@
 ﻿using AppLibrary.Interfaces;
 using System.Diagnostics;
+using System.IO;
+
 
 namespace AppLibrary.Services;
 
-internal class FileService : IFileService
+public class FileService : IFileService
 {
-    private string filePath= @"c:\csharptask\contacts.json";
+    
 
     public string GetContent(string filePath)
     {
@@ -18,7 +20,7 @@ internal class FileService : IFileService
         }
 
 
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        catch (Exception ex) { Debug.WriteLine("FileService - GetContent" + ex.Message); }
             return null!;
         }
     
@@ -31,7 +33,7 @@ internal class FileService : IFileService
             sw.Write(content);
             return true;
         }
-            catch (Exception ex) {Debug.WriteLine(ex.Message); }
+            catch (Exception ex) {Debug.WriteLine("FileService - SaveContent"+ ex.Message); }
             return false;
     }
 }

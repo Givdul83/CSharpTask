@@ -11,7 +11,7 @@ public class ContactService : IContactService
 {
     private readonly IFileService _fileService = new FileService();
     private List<IContact> _contacts = [];
-    private readonly string _filePath = @"c:\chsarptask\contacts.json";
+    private readonly string _filePath = @"c:\csharptask\contacts.json";
 
     public bool AddContactToList(IContact contact)
     {
@@ -21,7 +21,7 @@ public class ContactService : IContactService
             {
                 _contacts.Add(contact);
 
-                string json = JsonConvert.SerializeObject(contact, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+                string json = JsonConvert.SerializeObject(_contacts, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
 
                 var result = _fileService.SaveContent(_filePath, json);
 
@@ -29,7 +29,7 @@ public class ContactService : IContactService
                 return result;
         } 
         }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        catch (Exception ex) { Debug.WriteLine("ContactService- AddContactToList"+ ex.Message); }
         return false;
     }
 
@@ -37,11 +37,14 @@ public class ContactService : IContactService
     {
         try
         {
+            GetContactsFromList();
+            var contact = _contacts.FirstOrDefault(x => x.Email == email);
+            return contact ??= null!;
 
-            return true;
+            
         }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        return false;
+        catch (Exception ex) { Debug.WriteLine("ContactService- GetContactToList" + ex.Message); }
+        return null!;
     }
 
     public IEnumerable<IContact> GetContactsFromList()
@@ -53,22 +56,30 @@ public class ContactService : IContactService
             if (!string.IsNullOrEmpty(content))
             {
                 _contacts = JsonConvert.DeserializeObject<List<IContact>>(content, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })! ;
+                return _contacts;
             }
 
-            return content;
+           
         }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        return null;
+        catch (Exception ex) { Debug.WriteLine("ContactService- AddContactsToList" + ex.Message); }
+        return null!;
     }
 
-    public bool RemoveContactFromList(IContact contact)
+    public bool RemoveContactFromList(string email)
     {
         try
         {
+            GetContactsFromList();
+            var contact = _contacts.FirstOrDefault(x => x.Email == email);
 
-            return true;
+            if (contact != null)
+            {
+                _contacts.Remove(contact);
+                return true;
+            }
+            else { return false; };
         }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        catch (Exception ex) { Debug.WriteLine("ContactService- RemoveContactToList" + ex.Message); }
         return false;
     }
 
@@ -79,7 +90,7 @@ public class ContactService : IContactService
 
             return true;
         }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        catch (Exception ex) { Debug.WriteLine("ContactService- UpdateContact" + ex.Message); }
         return false;
     }
 }

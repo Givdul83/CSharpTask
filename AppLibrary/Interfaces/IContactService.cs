@@ -9,7 +9,7 @@ public interface IContactService
 
     IContact GetContactFromList(string email);
 
-    bool RemoveContactFromList(IContact contact);
+    bool RemoveContactFromList(string email);
 
     bool UpdateContact(IContact contact);
 }
