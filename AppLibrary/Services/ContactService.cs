@@ -1,38 +1,85 @@
 ﻿using AppLibrary.Interfaces;
+using Newtonsoft.Json;
+using System.Diagnostics;
+using System.Text.Json.Serialization;
+using System.Collections;
 
 namespace AppLibrary.Services;
 
 public class ContactService : IContactService
 
 {
-    /// <summary>
-    /// Add a contact to the contactlist
-    /// </summary>
-    /// <param name="contact">a Contact of type IContact</param>
-    /// <returns>Return true if succesfull, false if failed or contact already exists</returns>
-    
+    private readonly IFileService _fileService = new FileService();
+    private List<IContact> _contacts = [];
+    private readonly string _filePath = @"c:\chsarptask\contacts.json";
+
     public bool AddContactToList(IContact contact)
     {
-        return true;
+        try
+        {
+            if (!_contacts.Any(x => x.Email == contact.Email))
+            {
+                _contacts.Add(contact);
+
+                string json = JsonConvert.SerializeObject(contact, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+
+                var result = _fileService.SaveContent(_filePath, json);
+
+
+                return result;
+        } 
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return false;
     }
 
     public IContact GetContactFromList(string email)
     {
-        return null!;
+        try
+        {
+
+            return true;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return false;
     }
 
     public IEnumerable<IContact> GetContactsFromList()
     {
-        return null!;
+        try
+        {
+            var content = _fileService.GetContent(_filePath);
+
+            if (!string.IsNullOrEmpty(content))
+            {
+                _contacts = JsonConvert.DeserializeObject<List<IContact>>(content, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })! ;
+            }
+
+            return content;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null;
     }
 
     public bool RemoveContactFromList(IContact contact)
     {
-        return true;
+        try
+        {
+
+            return true;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return false;
     }
 
     public bool UpdateContact(IContact contact)
     {
-        return true;
+        try
+        {
+
+            return true;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return false;
     }
 }

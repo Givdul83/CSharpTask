@@ -5,6 +5,8 @@ namespace AppLibrary.Services;
 
 internal class FileService : IFileService
 {
+    private string filePath= @"c:\csharptask\contacts.json";
+
     public string GetContent(string filePath)
     {
         try
