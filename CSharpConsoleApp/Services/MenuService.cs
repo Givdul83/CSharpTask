@@ -8,9 +8,9 @@ namespace CSharpConsoleApp.Services;
 
 internal class MenuService 
 {
-    private readonly IContactService _contactService;
+    private readonly ContactService _contactService;
 
-    public MenuService(IContactService contactService)
+    public MenuService(ContactService contactService)
     {
         _contactService = contactService;
     }
@@ -35,8 +35,6 @@ internal class MenuService
                 Console.WriteLine("4. Add a new contact");
                 Console.WriteLine();
                 Console.WriteLine("5. Quit program");
-                Console.WriteLine();
-                Console.WriteLine("------------------------------------------");
                 Console.WriteLine();
                 Console.Write("Please select one of options above :");
                 var answer = Console.ReadLine();
@@ -67,7 +65,6 @@ internal class MenuService
                             Console.WriteLine("----------------------------------------------------");
                             index++;
                             }
-                            Console.WriteLine("Press any key to return to main menu");
                             Console.ReadKey();
                              break;
 
@@ -173,9 +170,6 @@ internal class MenuService
                     newContact.PhoneNumber = Console.ReadLine()??"";
 
                     _contactService.AddContactToList(newContact);
-                    Console.WriteLine("Contact successfully added to list");
-                    Console.WriteLine("Press any key to return to main menu");
-                    Console.ReadKey();
 
                     break;
 
@@ -195,32 +189,34 @@ internal class MenuService
                     }
                  }
 
-    private void QuitMenu()
-    {
-            Console.Clear();
-            Console.Write("Are you sure you want to quit? (Y/N)");
-            var quit = Console.ReadLine();
+          private void QuitMenu()
+          {
+                    Console.Clear();
+                    Console.Write("Are you sure you want to quit? (Y/N)");
+                    var quit = Console.ReadLine();
 
-            switch (quit)
-            {
-                case "y":
-                    Console.WriteLine("Press any key to exit program");
-                    Console.ReadKey();
-                    Environment.Exit(0);
-                    break;
+                    switch (quit)
+                    {
+                        case "y":
+                            Console.WriteLine("Press any key to exit program");
+                            Console.ReadKey();
+                            Environment.Exit(0);
+                            break;
 
-                case "n":
-                    Console.WriteLine("Press any key to return to Main Menu");
-                    Console.ReadKey();
-                    break;
+                        case "n":
+                            Console.WriteLine("Press any key to return to Main Menu");
+                            Console.ReadKey();
+                            break;
 
-                default:
-                    Console.WriteLine("invalid option, press any key to try again");
-                    Console.ReadKey();
-                    QuitMenu();
-                    break;
-            }
-    }
+                        default:
+                            Console.WriteLine("invalid option, press any key to try again");
+                            Console.ReadKey();
+                            QuitMenu();
+                            break;
+
+                    }
+
+           }
 }
                 
                 
