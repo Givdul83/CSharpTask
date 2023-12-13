@@ -1,6 +1,6 @@
 ﻿namespace AppLibrary.Interfaces;
 
-internal interface IFileService
+public interface IFileService
 {
     /// <summary>
     /// Saves your content to a specified file
