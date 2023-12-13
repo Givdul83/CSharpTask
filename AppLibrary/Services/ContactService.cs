@@ -11,12 +11,15 @@ public class ContactService : IContactService
 {
     private readonly IFileService _fileService;
 
-
+    public ContactService(IFileService fileService)
+    {
+        _fileService = fileService;
+    }
 
     private List<IContact> _contacts = [];
     private readonly string _filePath = @"c:\csharptask\contacts.json";
 
-   
+    
 
     public bool AddContactToList(IContact contact)
     {
@@ -28,12 +31,10 @@ public class ContactService : IContactService
             {
                 _contacts.Add(contact);
 
-                string json = JsonConvert.SerializeObject(_contacts, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-
-                var result = _fileService.SaveContent(_filePath, json);
+                SaveListToFile();
 
 
-                return result;
+                return true;
         } 
         }
         catch (Exception ex) { Debug.WriteLine("ContactService- AddContactToList"+ ex.Message); }
@@ -44,6 +45,7 @@ public class ContactService : IContactService
     {
         try
         {
+            Console.Clear();
             GetContactsFromList();
             var contact = _contacts.FirstOrDefault(x => x.Email == email);
             return contact ??= null!;
@@ -76,12 +78,17 @@ public class ContactService : IContactService
     {
         try
         {
+            Console.Clear();
             GetContactsFromList();
             var contact = _contacts.FirstOrDefault(x => x.Email == email);
 
             if (contact != null)
             {
                 _contacts.Remove(contact);
+                SaveListToFile();
+
+
+
                 return true;
             }
             else 
@@ -102,5 +109,12 @@ public class ContactService : IContactService
         }
         catch (Exception ex) { Debug.WriteLine("ContactService- UpdateContact" + ex.Message); }
         return false;
+    }
+
+
+    public void SaveListToFile()
+    {
+        string json = JsonConvert.SerializeObject(_contacts, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+        var result = _fileService.SaveContent(_filePath, json);
     }
 }
